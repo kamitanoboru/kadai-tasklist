@@ -65,10 +65,10 @@ class TasksController extends Controller
     public function show($id)
     {
         
-        $Task = Task::find($id);
+        $task = Task::find($id);
 
-        return view('Tasks.show', [
-            'Task' => $Task,
+        return view('tasks.show', [
+            'task' => $task,
         ]);
         
     }
