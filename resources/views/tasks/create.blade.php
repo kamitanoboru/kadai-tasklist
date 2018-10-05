@@ -15,7 +15,19 @@
         </div>
         <div class="form-group">        
         {!! Form::label('status', 'ステータス:') !!}
+        
+        {{--セレクトボックスに変更
         {!! Form::text('status',null,['class'=>'form-control']) !!}
+        --}}
+        
+        {{--新規作成は、startに決っているので、hiddenで渡そうかな--}}
+        {{Form::select('status', [
+           '新規' => '新規',
+           '着手中' => '着手中',
+           '保留中' => '保留中',
+           '終了' => '終了'],'新規'
+        )}}
+        
         </div>
         {!! Form::submit('タスク追加', ['class' => 'btn btn-primary']) !!}
 

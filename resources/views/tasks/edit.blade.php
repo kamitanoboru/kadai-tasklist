@@ -15,9 +15,18 @@
         {!! Form::label('content', 'タスク:') !!}
         {!! Form::text('content',null,['class'=>'form-control']) !!}
         </div>
-        <div class="form-group">        
+        <div class="form-group">   
         {!! Form::label('status', 'ステータス:') !!}
+        {{--セレクトに変更
+        
         {!! Form::text('status',null,['class'=>'form-control']) !!}
+        --}}
+        {{Form::select('status', [
+           '新規' => '新規',
+           '着手中' => '着手中',
+           '保留中' => '保留中',
+           '終了' => '終了'],$task ->status
+        )}}
         </div>      
 
         {!! Form::submit('更新', ['class' => 'btn btn-primary']) !!}
