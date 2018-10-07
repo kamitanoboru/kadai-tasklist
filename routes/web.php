@@ -24,15 +24,15 @@ Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login')->name('login.post');
 
+//ログアウト
+Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
+
 
 
 //　ログイン認証付きのルーティング
 Route::group(['middleware' => ['auth']], function () {
 
-//ログアウト
-Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
-
-//その他
+//タスクの登録、変更、削除など
 Route::resource('tasks', 'TasksController', ['only' => ['show', 'create', 'store' ,'update','edit','destroy']]);
 
 
