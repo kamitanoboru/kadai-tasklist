@@ -32,8 +32,8 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 //　ログイン認証付きのルーティング
 Route::group(['middleware' => ['auth']], function () {
 
-//タスクの登録、変更、削除など
-Route::resource('tasks', 'TasksController', ['only' => ['show', 'create', 'store' ,'update','edit','destroy']]);
+    //タスクの登録、変更、削除など
+    Route::resource('tasks', 'TasksController', ['only' => ['index','show', 'create', 'store' ,'update','edit','destroy']]);
 
 
 });
