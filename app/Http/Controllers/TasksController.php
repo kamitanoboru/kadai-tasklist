@@ -21,14 +21,11 @@ class TasksController extends Controller
             $user = \Auth::user();
             $tasks = $user->tasks()->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+            return view('tasks.index', ['tasks' => $tasks,]);
         }else {
             
             return view('welcome');
         }
-
     }
 
     /**
@@ -64,15 +61,20 @@ class TasksController extends Controller
             'status' => 'required|max:10',
         ]);
         
-        $user = \Auth::user();
-        $user_id=$user -> id;
+        
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status' => $request->status,
+        ]);
 
+/*
+        $user_id=\Auth::id();
         $task = new Task;
         $task->user_id=$user_id;
         $task->content = $request->content;
         $task->status = $request->status;
         $task->save();
-
+*/
         return redirect('/');
 
     }
@@ -86,16 +88,11 @@ class TasksController extends Controller
     public function show($id)
     {
         
-        $user=\Auth::user();
-        $user_id=$user->id;
+        
         $task = Task::find($id);
-        $task_user_id=$task->user_id;
-        
-        if($user_id != $task_user_id){
-            //return redirect('/');
-            return view('welcome');
+        if(\Auth::id() !== $task->user_id){
+            return redirect('/');
         }
-        
         
 
         return view('tasks.show', [
@@ -113,16 +110,11 @@ class TasksController extends Controller
     public function edit($id)
     {
         
-        $user=\Auth::user();
-        $user_id=$user->id;
         $task = Task::find($id);
-        $task_user_id=$task->user_id;
-
-        
-        if($user_id != $task_user_id){
-            //return redirect('/');
-            return view('welcome');
+        if(\Auth::id() !== $task->user_id){
+            return redirect('/');
         }
+        
 
 
         return view('tasks.edit', [
@@ -140,26 +132,30 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
     
-        $user=\Auth::user();
-        $user_id=$user->id;
         $task = Task::find($id);
-        $task_user_id=$task->user_id;
-        
-        if($user_id != $task_user_id){
+        if(\Auth::id() !== $task->user_id){
             return redirect('/');
-        }    
+        }
+        
     
     
         $this->validate($request, [
             'content' => 'required|max:191',
             'status' => 'required|max:10',
         ]);
-        
+/*        
         $task = Task::find($id);
-        $task->user_id=$user_id;
+        $task->user_id=\Auth::id();
         $task->content = $request->content;
         $task->status = $request->status;
         $task->save();
+*/
+        $request->user()->tasks()->where('id', $id)->update([
+            'content' => $request->content,
+            'status' => $request->status,
+        ]);
+        
+        
 
         return redirect('/');
     }
@@ -172,15 +168,12 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        $user=\Auth::user();
-        $user_id=$user->id;
-        
+
         $task = Task::find($id);
-        $task_user_id=$task->user_id;
-        
-        if($user_id != $task_user_id){
+        if(\Auth::id() !== $task->user_id){
             return redirect('/');
         }
+
 
         $task->delete();
 
